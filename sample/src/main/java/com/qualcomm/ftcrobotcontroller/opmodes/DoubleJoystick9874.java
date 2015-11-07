@@ -28,7 +28,6 @@ public class DoubleJoystick9874 extends OpMode {
     public static final double TURN_INCREASE = 0.75;
     public static final float MIN_TURN = 0.10f;
     //Smart stop constants
-    public static final double SMARTSTOP_THRESHOLD = 0.4;
     public static final double SMARTSTOP_INCREMENT = 0.1;
 
     //Smart stop variables
@@ -89,7 +88,7 @@ public class DoubleJoystick9874 extends OpMode {
 
         //If smart stop is on apply smart scoring algorithm
         if(smartStop)
-            if(previousSpeed - yVal > SMARTSTOP_THRESHOLD)
+            if(previousSpeed - yVal > SMARTSTOP_INCREMENT)
                 yVal = (float)(previousSpeed - SMARTSTOP_INCREMENT);
 
         //Move robot
