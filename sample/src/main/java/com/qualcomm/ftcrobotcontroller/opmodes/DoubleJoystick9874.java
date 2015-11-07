@@ -7,16 +7,33 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
- * Created by Will on 11/7/2015.
+ * Created by Will and Russell on 11/7/2015.
+ * Features:
+ * -- Forward and backwards motion with left joystick y-axis
+ * -- Left and right turning while moving or stationary with right joystick x-axis
+ * -- Apply speed boost with bottom right trigger
+ * -- Apply slowed speed with bottom left trigger
+ * -- 180 degree turn by pressing a
+ * -- Toggle smart stopping using y
  */
 public class DoubleJoystick9874 extends OpMode {
     Controller one = new Controller(gamepad1);
 
+    //Threshold for stick noise
     public static final double STICK_THRESHOLD = 0.05;
+    //Forward/backwards modifiers
     public static final double DAMPENING_FORWARD = 0.5;
     public static final double INCREASED_DAMPENING = 0.8;
+    //Turning modifiers
     public static final double TURN_INCREASE = 0.75;
     public static final float MIN_TURN = 0.10f;
+    //Smart stop constants
+    public static final double SMARTSTOP_THRESHOLD = 0.4;
+    public static final double SMARTSTOP_INCREMENT = 0.1;
+
+    //Smart stop variables
+    private boolean smartStop = false;
+    private float previousSpeed = 0;
 
     private int turn180Progress = 0;
 
@@ -40,6 +57,10 @@ public class DoubleJoystick9874 extends OpMode {
     public void loop() {
         //Read info from controller
         one.update(gamepad1);
+
+        //Check for smart stop toggle
+        if(one.y == ButtonState.PRESSED)
+            smartStop = !smartStop;
 
         //If robot is in 180 degree turn
         if(turn180Progress > 0) {
@@ -65,6 +86,11 @@ public class DoubleJoystick9874 extends OpMode {
         //Read left stick value to determine motor speed, account for controller noise, and scale
         //down. Then multiply by yCoeff and deadband.
         float yVal = (float)(MathUtil.deadband(STICK_THRESHOLD, one.left_stick_y) * yCoeff);
+
+        //If smart stop is on apply smart scoring algorithm
+        if(smartStop)
+            if(previousSpeed - yVal > SMARTSTOP_THRESHOLD)
+                yVal = (float)(previousSpeed - SMARTSTOP_INCREMENT);
 
         //Move robot
         if(xVal > 0 && Math.abs(yVal) > 0) {
@@ -93,6 +119,9 @@ public class DoubleJoystick9874 extends OpMode {
             rightFront.setPower(0);
             rightBack.setPower(0);
         }
+
+        //Set previous speed to this loops yVal for use in smart stopping
+        previousSpeed = yVal;
     }
 
     private void setLeftMotors(float xVal, float yVal) {
