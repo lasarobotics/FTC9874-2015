@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * -- Left and right turning while moving or stationary with right joystick x-axis
  * -- Apply speed boost with bottom right trigger
  * -- Apply slowed speed with bottom left trigger
- * -- 180 degree turn by pressing a
  * -- Toggle smart stopping using y
  */
 public class DoubleJoystick9874 extends OpMode {
@@ -33,8 +32,6 @@ public class DoubleJoystick9874 extends OpMode {
     //Smart stop variables
     private boolean smartStop = false;
     private float previousSpeed = 0;
-
-    private int turn180Progress = 0;
 
     DcMotor leftBack, rightBack, leftFront, rightFront;
 
@@ -60,19 +57,6 @@ public class DoubleJoystick9874 extends OpMode {
         //Check for smart stop toggle
         if(one.y == ButtonState.PRESSED)
             smartStop = !smartStop;
-
-        //If robot is in 180 degree turn
-        if(turn180Progress > 0) {
-            stationaryTurn(1);
-            turn180Progress--;
-            return;
-        }
-
-        //Do 180 if a button pressed
-        if(one.a == ButtonState.PRESSED) {
-            turn180Progress = 500;
-            return;
-        }
 
         //Read right stick to determine where to turn, account for controller noise, and scale
         float xVal = (float) MathUtil.deadband(STICK_THRESHOLD, one.right_stick_x * (1 + TURN_INCREASE));
