@@ -1,1 +1,3 @@
 include ':ftc-library','sample'
+include ':opencv-java'
+include ':ftc-visionlib'
