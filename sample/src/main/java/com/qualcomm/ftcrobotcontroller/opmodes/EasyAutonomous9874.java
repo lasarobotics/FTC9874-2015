@@ -34,6 +34,11 @@ public class EasyAutonomous9874 extends OpMode {
             rightBack.setPower(0);
             rightFront.setPower(0);
         }
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            //do nothing
+        }
     }
 
     @Override
