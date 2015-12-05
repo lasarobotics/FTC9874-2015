@@ -18,6 +18,9 @@ public class TankDrive9874 extends OpMode {
     public static final double DAMPENING = 0.5;
     public static final double INCREASED_DAMPENING = 0.8;
 
+    public static final int LEFT_MULTIPLIER = -1;
+    public static final int RIGHT_MULTIPLIER = 1;
+
     //Motors
     DcMotor leftBack, rightBack, leftFront, rightFront;
 
@@ -48,6 +51,8 @@ public class TankDrive9874 extends OpMode {
         //Adjust for slight inconsistencies and apply changes from above
         float leftVal = (float) MathUtil.deadband(STICK_THRESHOLD, one.left_stick_y * (1 - adjustedDampening));
         float rightVal = (float) MathUtil.deadband(STICK_THRESHOLD, one.right_stick_y * (1 - adjustedDampening));
+        leftVal *= LEFT_MULTIPLIER;
+        rightVal *= RIGHT_MULTIPLIER;
 
         //Utilize Tank class to move robot
         Tank.motor4(leftFront, rightFront, leftBack, rightBack, leftVal, rightVal);

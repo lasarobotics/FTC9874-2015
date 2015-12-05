@@ -29,6 +29,11 @@ public class DoubleJoystick9874 extends OpMode {
     //Smart stop constants
     public static final double SMARTSTOP_INCREMENT = 0.1;
 
+    public static final int LEFT_FRONT_MULTIPLIER = -1;
+    public static final int LEFT_BACK_MULTIPLIER = -1;
+    public static final int RIGHT_FRONT_MULTIPLIER = 1;
+    public static final int RIGHT_BACK_MULTIPLIER = 1;
+
     //Smart stop variables
     private boolean smartStop = false;
     private float previousSpeed = 0;
@@ -78,23 +83,23 @@ public class DoubleJoystick9874 extends OpMode {
         //Move robot
         if(xVal > 0 && Math.abs(yVal) > 0) {
             //If moving forward or backward and right
-            leftBack.setPower(-yVal);
-            leftFront.setPower(-yVal);
+            leftBack.setPower(-yVal * LEFT_BACK_MULTIPLIER);
+            leftFront.setPower(-yVal * LEFT_FRONT_MULTIPLIER);
             setRightMotors(xVal, yVal);
         } else if(xVal < 0 && Math.abs(yVal) > 0) {
             //If moving forward or backward and left
-            rightBack.setPower(yVal);
-            rightFront.setPower(yVal);
+            rightBack.setPower(yVal * RIGHT_BACK_MULTIPLIER);
+            rightFront.setPower(yVal * RIGHT_FRONT_MULTIPLIER);
             setLeftMotors(xVal, yVal);
         } else if(xVal != 0 && yVal == 0) {
             //If turning stationary
             stationaryTurn(xVal);
         } else if(xVal == 0 && yVal != 0) {
             //If going straight
-            leftFront.setPower(-yVal);
-            leftBack.setPower(-yVal);
-            rightFront.setPower(yVal);
-            rightBack.setPower(yVal);
+            leftFront.setPower(-yVal * LEFT_FRONT_MULTIPLIER);
+            leftBack.setPower(-yVal * LEFT_BACK_MULTIPLIER);
+            rightFront.setPower(yVal * RIGHT_FRONT_MULTIPLIER);
+            rightBack.setPower(yVal * RIGHT_BACK_MULTIPLIER);
         } else {
             //Going nowhere
             leftFront.setPower(0);
@@ -113,8 +118,8 @@ public class DoubleJoystick9874 extends OpMode {
         if(yVal < 0) {
             leftPower = -leftPower;
         }
-        leftBack.setPower(-leftPower);
-        leftFront.setPower(-leftPower);
+        leftBack.setPower(-leftPower * LEFT_BACK_MULTIPLIER);
+        leftFront.setPower(-leftPower * LEFT_FRONT_MULTIPLIER);
     }
     private void setRightMotors(float xVal, float yVal) {
         float rightPower = Math.abs(yVal) * (1 - xVal);
@@ -122,14 +127,14 @@ public class DoubleJoystick9874 extends OpMode {
         if(yVal < 0) {
             rightPower = -rightPower;
         }
-        rightBack.setPower(rightPower);
-        rightFront.setPower(rightPower);
+        rightBack.setPower(rightPower * RIGHT_BACK_MULTIPLIER);
+        rightFront.setPower(rightPower * RIGHT_FRONT_MULTIPLIER);
     }
     private void stationaryTurn(float xVal) {
-        leftBack.setPower(xVal);
-        leftFront.setPower(xVal);
-        rightBack.setPower(xVal);
-        rightFront.setPower(xVal);
+        leftBack.setPower(xVal * LEFT_BACK_MULTIPLIER);
+        leftFront.setPower(xVal * LEFT_FRONT_MULTIPLIER);
+        rightBack.setPower(xVal * RIGHT_BACK_MULTIPLIER);
+        rightFront.setPower(xVal * RIGHT_FRONT_MULTIPLIER);
     }
 
     @Override
