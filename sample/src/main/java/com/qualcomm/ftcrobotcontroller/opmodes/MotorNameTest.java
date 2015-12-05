@@ -18,14 +18,22 @@ public class MotorNameTest extends OpMode {
     }
     @Override
     public void loop() {
-        if(one.a == ButtonState.HELD)
+        if(one.a == ButtonState.PRESSED)
             leftFront.setPower(0.5);
-        if(one.b == ButtonState.HELD)
+        else
+            leftFront.setPower(0);
+        if(one.b == ButtonState.PRESSED)
             leftBack.setPower(0.5);
-        if(one.x == ButtonState.HELD)
+        else
+            leftBack.setPower(0);
+        if(one.x == ButtonState.PRESSED)
             rightFront.setPower(0.5);
-        if(one.y == ButtonState.HELD)
+        else
+            rightFront.setPower(0);
+        if(one.y == ButtonState.PRESSED)
             rightBack.setPower(0.5);
+        else
+            rightBack.setPower(0);
     }
     @Override
     public void init() {
