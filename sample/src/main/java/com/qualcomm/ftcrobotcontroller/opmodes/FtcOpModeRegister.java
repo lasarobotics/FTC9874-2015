@@ -35,6 +35,7 @@ import android.widget.Button;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Register Op Modes
@@ -65,5 +66,7 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("Easy Autonomous 9874", EasyAutonomous9874.class);
         manager.register("Test Opmode 9874", TestOpmode.class);
         manager.register("Button Test Opmode 9874", ButtonTestOpmode.class);
+        manager.register("TankDrive 9874", TankDrive9874.class);
+        manager.register("Servo Test 9874", ServoTest.class);
     }
 }

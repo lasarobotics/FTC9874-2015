@@ -47,13 +47,13 @@ public class TankDrive9874 extends OpMode {
 
         //Servo
         if(one.b == 3.0) {
-            if((servoPower += 0.05) > 1) {
-                servoPower = 1;
+            if((servoPower += 0.05) > 0.95) {
+                servoPower = 0.95;
             }
         }
         if(one.x == 3.0) {
-            if((servoPower -= 0.05) < -1) {
-                servoPower = -1;
+            if((servoPower -= 0.05) < -0.95) {
+                servoPower = -0.95;
             }
         }
         servo.setPosition(servoPower);

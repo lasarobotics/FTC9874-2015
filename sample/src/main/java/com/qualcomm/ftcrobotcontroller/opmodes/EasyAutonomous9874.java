@@ -38,7 +38,6 @@ public class EasyAutonomous9874 extends OpMode {
 
     @Override
     public void stop() {
-        super.stop();
         leftBack.setPower(0);
         leftFront.setPower(0);
         rightBack.setPower(0);

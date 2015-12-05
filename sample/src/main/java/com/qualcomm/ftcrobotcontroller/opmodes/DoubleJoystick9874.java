@@ -63,18 +63,19 @@ public class DoubleJoystick9874 extends OpMode {
 
         //Servo
         if(one.b == 3.0) {
-            if((servoPower += 0.05) > 1) {
-                servoPower = 1;
+            if((servoPower += 0.05) > 0.95) {
+                servoPower = 0.95;
             }
         }
         if(one.x == 3.0) {
-            if((servoPower -= 0.05) < -1) {
-                servoPower = -1;
+            if((servoPower -= 0.05) < -0.95) {
+                servoPower = -0.95;
             }
         }
         servo.setPosition(servoPower);
 
-        //Arm
+        //FIXME uncomment
+        /*//Arm
         if(one.y == 3.0) {
             arm.setPower(0.1);
         } else if(one.a == 3.0) {
@@ -90,12 +91,13 @@ public class DoubleJoystick9874 extends OpMode {
             armEnd.setPower(-0.1);
         } else {
             armEnd.setPower(0);
-        }
+        }*/
 
         //Read right stick to determine where to turn, account for controller noise, and scale
         float xVal = (float) MathUtil.deadband(STICK_THRESHOLD, one.right_stick_x * (1 + TURN_INCREASE));
         //Make sure xVal is within acceptable parameters
         xVal = (float)MathUtil.coerce(-1.0, 1.0, (double)xVal);
+        xVal *= -1;
 
         //Coefficient for yVal, if right trigger is pressed, apply turbo, if left trigger, apply
         //increased dampening. If none, apply normal dampening.
