@@ -31,5 +31,6 @@ public class ServoTest extends OpMode {
             direction = false;
         }
         servo.setPosition(servoValue);
+        telemetry.addData("INFO", "Servo value: " + servoValue);
     }
 }
