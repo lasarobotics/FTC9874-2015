@@ -20,7 +20,7 @@ public class TankDrive9874 extends OpMode {
     public static final double DAMPENING = 0.5;
     public static final double INCREASED_DAMPENING = 0.8;
 
-    public static final int LEFT_MULTIPLIER = -1;
+    public static final int LEFT_MULTIPLIER = 1;
     public static final int RIGHT_MULTIPLIER = 1;
 
     private int servoPower = 0;

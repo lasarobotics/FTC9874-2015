@@ -28,8 +28,8 @@ public class DoubleJoystick9874 extends OpMode {
     public static final double TURN_INCREASE = 0.75;
     public static final float MIN_TURN = 0.10f;
 
-    public static final int LEFT_FRONT_MULTIPLIER = -1;
-    public static final int LEFT_BACK_MULTIPLIER = -1;
+    public static final int LEFT_FRONT_MULTIPLIER = 1;
+    public static final int LEFT_BACK_MULTIPLIER = 1;
     public static final int RIGHT_FRONT_MULTIPLIER = 1;
     public static final int RIGHT_BACK_MULTIPLIER = 1;
 
