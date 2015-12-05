@@ -29,16 +29,28 @@ public class TestOpmode extends OpMode {
             telemetry.addData("INFO", "Reset...");
         } else if(swap > 300) {
             leftBack.setPower(0.1);
+            leftFront.setPower(0);
+            rightFront.setPower(0);
+            rightBack.setPower(0);
             telemetry.addData("INFO", "LEFT BACK");
         } else if(swap > 200) {
             telemetry.addData("INFO", "LEFT FRONT");
             leftFront.setPower(0.1);
+            leftBack.setPower(0);
+            rightFront.setPower(0);
+            rightBack.setPower(0);
         } else if(swap > 100) {
             telemetry.addData("INFO", "RIGHT BACK");
             rightBack.setPower(0.1);
+            leftBack.setPower(0);
+            rightFront.setPower(0);
+            leftFront.setPower(0);
         } else {
             telemetry.addData("INFO", "RIGHT FRONT");
             rightFront.setPower(0.1);
+            rightBack.setPower(0);
+            leftFront.setPower(0);
+            leftBack.setPower(0);
         }
     }
 

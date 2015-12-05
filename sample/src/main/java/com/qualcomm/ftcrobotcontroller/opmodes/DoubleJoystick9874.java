@@ -62,12 +62,12 @@ public class DoubleJoystick9874 extends OpMode {
         one.update(gamepad1);
 
         //Servo
-        if(one.b == ButtonState.PRESSED) {
+        if(one.b == 3.0) {
             if((servoPower += 0.05) > 1) {
                 servoPower = 1;
             }
         }
-        if(one.x == ButtonState.PRESSED) {
+        if(one.x == 3.0) {
             if((servoPower -= 0.05) < -1) {
                 servoPower = -1;
             }
@@ -75,18 +75,18 @@ public class DoubleJoystick9874 extends OpMode {
         servo.setPosition(servoPower);
 
         //Arm
-        if(one.y == ButtonState.PRESSED) {
+        if(one.y == 3.0) {
             arm.setPower(0.1);
-        } else if(one.a == ButtonState.PRESSED) {
+        } else if(one.a == 3.0) {
             arm.setPower(-0.1);
         } else {
             arm.setPower(0);
         }
 
         //ArmEnd
-        if(one.dpad_down == ButtonState.PRESSED) {
+        if(one.dpad_down == 3.0) {
             armEnd.setPower(0.1);
-        } else if(one.dpad_up == ButtonState.PRESSED) {
+        } else if(one.dpad_up == 3.0) {
             armEnd.setPower(-0.1);
         } else {
             armEnd.setPower(0);
