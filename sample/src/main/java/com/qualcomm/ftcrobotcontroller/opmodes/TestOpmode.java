@@ -41,4 +41,9 @@ public class TestOpmode extends OpMode {
             rightFront.setPower(0.1);
         }
     }
+
+    @Override
+    public void start() {
+
+    }
 }

@@ -22,4 +22,9 @@ public class ButtonTestOpmode extends OpMode {
         telemetry.addData("X", one.x);
         telemetry.addData("Y", one.y);
     }
+
+    @Override
+    public void start() {
+
+    }
 }

@@ -42,4 +42,9 @@ public class EasyAutonomous9874 extends OpMode {
         rightBack.setPower(0);
         rightFront.setPower(0);
     }
+
+    @Override
+    public void start() {
+
+    }
 }
