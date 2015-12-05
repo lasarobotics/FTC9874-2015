@@ -23,36 +23,36 @@ public class MotorNameTest extends OpMode {
     }
     @Override
     public void loop() {
-        if(one.a == ButtonState.PRESSED)
+        if(one.a == ButtonState.HELD)
             leftFront.setPower(ON_POWER);
         else
             leftFront.setPower(0);
-        if(one.b == ButtonState.PRESSED)
+        if(one.b == ButtonState.HELD)
             leftBack.setPower(ON_POWER);
         else
             leftBack.setPower(0);
-        if(one.x == ButtonState.PRESSED)
+        if(one.x == ButtonState.HELD)
             rightFront.setPower(ON_POWER);
         else
             rightFront.setPower(0);
-        if(one.y == ButtonState.PRESSED)
+        if(one.y == ButtonState.HELD)
             rightBack.setPower(ON_POWER);
         else
             rightBack.setPower(0);
-        if(one.dpad_down == ButtonState.PRESSED)
+        if(one.dpad_down == ButtonState.HELD)
             arm.setPower(ON_POWER);
         else
             arm.setPower(0);
-        if(one.dpad_up == ButtonState.PRESSED)
+        if(one.dpad_up == ButtonState.HELD)
             armEnd.setPower(ON_POWER);
         else
             armEnd.setPower(0);
-        if(one.dpad_left == ButtonState.PRESSED) {
+        if(one.dpad_left == ButtonState.HELD) {
             if(--servoAmount < 0) {
                 servoAmount = 0;
             }
         }
-        if(one.dpad_right == ButtonState.PRESSED) {
+        if(one.dpad_right == ButtonState.HELD) {
             if(++servoAmount > 255) {
                 servoAmount = 0;
             }
