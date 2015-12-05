@@ -27,22 +27,16 @@ public class DoubleJoystick9874 extends OpMode {
     //Turning modifiers
     public static final double TURN_INCREASE = 0.75;
     public static final float MIN_TURN = 0.10f;
-    //Smart stop constants
-    public static final double SMARTSTOP_INCREMENT = 0.1;
 
     public static final int LEFT_FRONT_MULTIPLIER = -1;
     public static final int LEFT_BACK_MULTIPLIER = -1;
     public static final int RIGHT_FRONT_MULTIPLIER = 1;
     public static final int RIGHT_BACK_MULTIPLIER = 1;
 
-    //Smart stop variables
-    private boolean smartStop = false;
-    private float previousSpeed = 0;
-
     //Servo variable
     private int servoPower = 0;
 
-    DcMotor leftBack, rightBack, leftFront, rightFront;
+    DcMotor leftBack, rightBack, leftFront, rightFront, arm, armEnd;
     Servo servo;
 
     @Override
@@ -52,6 +46,8 @@ public class DoubleJoystick9874 extends OpMode {
         rightBack = hardwareMap.dcMotor.get("rightBack");
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightFront = hardwareMap.dcMotor.get("rightFront");
+        arm = hardwareMap.dcMotor.get("arm");
+        armEnd = hardwareMap.dcMotor.get("armEnd");
         servo = hardwareMap.servo.get("servo");
     }
 
@@ -78,9 +74,23 @@ public class DoubleJoystick9874 extends OpMode {
         }
         servo.setPosition(servoPower);
 
-        //Check for smart stop toggle
-        if(one.y == ButtonState.PRESSED)
-            smartStop = !smartStop;
+        //Arm
+        if(one.y == ButtonState.PRESSED) {
+            arm.setPower(0.1);
+        } else if(one.a == ButtonState.PRESSED) {
+            arm.setPower(-0.1);
+        } else {
+            arm.setPower(0);
+        }
+
+        //ArmEnd
+        if(one.dpad_down == ButtonState.PRESSED) {
+            armEnd.setPower(0.1);
+        } else if(one.dpad_up == ButtonState.PRESSED) {
+            armEnd.setPower(-0.1);
+        } else {
+            armEnd.setPower(0);
+        }
 
         //Read right stick to determine where to turn, account for controller noise, and scale
         float xVal = (float) MathUtil.deadband(STICK_THRESHOLD, one.right_stick_x * (1 + TURN_INCREASE));
@@ -93,11 +103,6 @@ public class DoubleJoystick9874 extends OpMode {
         //Read left stick value to determine motor speed, account for controller noise, and scale
         //down. Then multiply by yCoeff and deadband.
         float yVal = (float)(MathUtil.deadband(STICK_THRESHOLD, one.left_stick_y) * yCoeff);
-
-        //If smart stop is on apply smart scoring algorithm
-        if(smartStop)
-            if(previousSpeed - yVal > SMARTSTOP_INCREMENT)
-                yVal = (float)(previousSpeed - SMARTSTOP_INCREMENT);
 
         //Move robot
         if(xVal > 0 && Math.abs(yVal) > 0) {
@@ -126,9 +131,6 @@ public class DoubleJoystick9874 extends OpMode {
             rightFront.setPower(0);
             rightBack.setPower(0);
         }
-
-        //Set previous speed to this loops yVal for use in smart stopping
-        previousSpeed = yVal;
     }
 
     private void setLeftMotors(float xVal, float yVal) {
