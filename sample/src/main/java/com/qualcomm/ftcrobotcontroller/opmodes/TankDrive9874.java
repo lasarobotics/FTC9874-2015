@@ -30,6 +30,7 @@ public class TankDrive9874 extends OpMode {
         rightBack = hardwareMap.dcMotor.get("rightBack");
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightFront = hardwareMap.dcMotor.get("rightFront");
+        servo = hardwareMap.servo.get("servo");
     }
 
     @Override
