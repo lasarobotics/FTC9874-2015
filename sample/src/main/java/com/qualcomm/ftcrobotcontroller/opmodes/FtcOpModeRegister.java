@@ -31,6 +31,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import android.widget.Button;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
@@ -62,5 +64,6 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("Motor Calibration", MotorNameTest.class);
         manager.register("Easy Autonomous 9874", EasyAutonomous9874.class);
         manager.register("Test Opmode 9874", TestOpmode.class);
+        manager.register("Button Test Opmode 9874", ButtonTestOpmode.class);
     }
 }
