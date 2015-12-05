@@ -34,7 +34,7 @@ public class DoubleJoystick9874 extends OpMode {
     public static final int RIGHT_BACK_MULTIPLIER = 1;
 
     //Servo variable
-    private int servoPower = 0;
+    private double servoPower = 0;
 
     DcMotor leftBack, rightBack, leftFront, rightFront, arm, armEnd;
     Servo servo;
@@ -63,13 +63,13 @@ public class DoubleJoystick9874 extends OpMode {
 
         //Servo
         if(one.b == ButtonState.PRESSED) {
-            if(++servoPower > 127) {
-                servoPower = 127;
+            if((servoPower += 0.05) > 1) {
+                servoPower = 1;
             }
         }
         if(one.x == ButtonState.PRESSED) {
-            if(--servoPower < 0) {
-                servoPower = 0;
+            if((servoPower -= 0.05) < -1) {
+                servoPower = -1;
             }
         }
         servo.setPosition(servoPower);
