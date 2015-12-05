@@ -5,6 +5,7 @@ import com.lasarobotics.library.controller.Controller;
 import com.lasarobotics.library.util.MathUtil;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by Will and Russell on 11/7/2015.
@@ -38,7 +39,11 @@ public class DoubleJoystick9874 extends OpMode {
     private boolean smartStop = false;
     private float previousSpeed = 0;
 
+    //Servo variable
+    private int servoPower = 0;
+
     DcMotor leftBack, rightBack, leftFront, rightFront;
+    Servo servo;
 
     @Override
     public void init() {
@@ -47,6 +52,7 @@ public class DoubleJoystick9874 extends OpMode {
         rightBack = hardwareMap.dcMotor.get("rightBack");
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightFront = hardwareMap.dcMotor.get("rightFront");
+        servo = hardwareMap.servo.get("servo");
     }
 
     @Override
@@ -58,6 +64,19 @@ public class DoubleJoystick9874 extends OpMode {
     public void loop() {
         //Read info from controller
         one.update(gamepad1);
+
+        //Servo
+        if(one.b == ButtonState.PRESSED) {
+            if(++servoPower > 255) {
+                servoPower = 255;
+            }
+        }
+        if(one.x == ButtonState.PRESSED) {
+            if(--servoPower < 0) {
+                servoPower = 0;
+            }
+        }
+        servo.setPosition(servoPower);
 
         //Check for smart stop toggle
         if(one.y == ButtonState.PRESSED)
