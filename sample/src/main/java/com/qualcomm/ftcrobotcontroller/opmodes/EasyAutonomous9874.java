@@ -1,5 +1,6 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.lasarobotics.library.controller.Controller;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Created by Russell on 12/5/2015.
  */
 public class EasyAutonomous9874 extends OpMode {
+    Controller one = new Controller(gamepad1);
     DcMotor leftBack, rightBack, leftFront, rightFront;
 
     @Override
