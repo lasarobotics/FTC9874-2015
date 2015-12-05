@@ -60,5 +60,7 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("FTC9874 DriveTrain", DriveTrain9874.class);
         manager.register("Double Joystick 9874", DoubleJoystick9874.class);
         manager.register("Motor Calibration", MotorNameTest.class);
+        manager.register("Easy Autonomous 9874", EasyAutonomous9874.class);
+        manager.register("Test Opmode 9874", TestOpmode.class);
     }
 }
