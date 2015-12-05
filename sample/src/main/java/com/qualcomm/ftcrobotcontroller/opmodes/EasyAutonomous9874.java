@@ -24,10 +24,10 @@ public class EasyAutonomous9874 extends OpMode {
     public void loop() {
         speedy++;
         if(speedy < 1000) {
-            leftBack.setPower(0.1);
-            leftFront.setPower(0.1);
-            rightBack.setPower(0.1);
-            rightFront.setPower(0.1);
+            leftBack.setPower(0.2);
+            leftFront.setPower(0.2);
+            rightBack.setPower(0.2);
+            rightFront.setPower(0.2);
         } else {
             leftBack.setPower(0);
             leftFront.setPower(0);
