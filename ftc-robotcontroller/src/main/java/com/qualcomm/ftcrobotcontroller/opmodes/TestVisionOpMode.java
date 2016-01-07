@@ -10,6 +10,9 @@ public class TestVisionOpMode extends VisionOpMode {
     private int lastBeaconCenterX = 0;
     private int absoluteCenter; //Image width divided by two
     private int moveThreshold; //Allowed deviation of beacon from image center
+    private int moveForwardTimer = 0;
+    private int moveBackwardTimer = 0;
+    private boolean stop = false;
     private static final int BEACON_WAIT_TIME = 5; //Time to wait before rotation if unable to find beacon
     private static final double ROTATE_MOTOR_POWER = 0.1; //Motor power when rotating
     private static final double DRIVE_MOTOR_POWER = 0.2; //Motor power when driving
@@ -29,6 +32,29 @@ public class TestVisionOpMode extends VisionOpMode {
     @Override
     public void loop() {
         super.loop();
+        if(stop) {
+            return;
+        }
+        if(moveForwardTimer > 0) {
+            moveForwardTimer--;
+            if(moveForwardTimer == 0) {
+                moveBackwardTimer = 500;
+            }
+            driveForward();
+            try {
+                Thread.sleep(1);
+            } catch(Exception e) {}
+        }
+        if(moveBackwardTimer > 0) {
+            moveBackwardTimer--;
+            if(moveBackwardTimer == 0) {
+                stop = true;
+            }
+            driveBackward();
+            try {
+                Thread.sleep(1);
+            } catch(Exception e) {}
+        }
         bce.loop(this);
         absoluteCenter = height/2;
         moveThreshold = height/19;
@@ -42,6 +68,9 @@ public class TestVisionOpMode extends VisionOpMode {
                     unsureMotors();
                     return;
                 }
+            }
+            if(Math.abs(analysis.getTopLeft().x - analysis.getTopRight().x) < 200) { //close enough
+                moveForwardTimer = 500;
             }
             shouldMove(beaconCenterX);
             beaconWaitCounter = 0;
@@ -78,6 +107,13 @@ public class TestVisionOpMode extends VisionOpMode {
         rightBack.setPower(DRIVE_MOTOR_POWER);
         leftFront.setPower(DRIVE_MOTOR_POWER);
         leftBack.setPower(DRIVE_MOTOR_POWER);
+    }
+
+    public void driveBackward() {
+        rightFront.setPower(-DRIVE_MOTOR_POWER);
+        rightBack.setPower(-DRIVE_MOTOR_POWER);
+        leftFront.setPower(-DRIVE_MOTOR_POWER);
+        leftBack.setPower(-DRIVE_MOTOR_POWER);
     }
 
     public void unsureMotors() {
