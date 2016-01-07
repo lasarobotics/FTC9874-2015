@@ -35,7 +35,7 @@ public class TestVisionOpMode extends VisionOpMode {
         
         BeaconAnalysis analysis = bce.getAnalysis();
         int beaconCenterX = (analysis.getTopLeft().x + analysis.getBottomRight().x)/2;
-        if(analysis.isLeftKnown() && analysis.isRightKnown()) {
+        if(analysis.isBeaconFound()) {
             if(!withinThreshold(beaconCenterX, lastBeaconCenterX, moveThreshold)) {
                 //Last known location of beacon is drastically different from current location
                 if(beaconWaitCounter++ < BEACON_WAIT_TIME) {
