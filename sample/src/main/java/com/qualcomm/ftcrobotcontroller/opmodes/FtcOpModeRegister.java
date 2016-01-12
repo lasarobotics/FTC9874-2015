@@ -51,15 +51,15 @@ public class FtcOpModeRegister implements OpModeRegister {
     public void register(OpModeManager manager) {
         //Custom op modes
         manager.register("Null", NullOp.class);
-        manager.register("Mecanum Prototype", MecanumPrototypeTeleop.class);
+        //manager.register("Mecanum Prototype", MecanumPrototypeTeleop.class);
         //manager.register("MonkeyC Do", MonkeyCDo.class);
         //manager.register("MonkeyC Write", MonkeyCWrite.class);
         //manager.register("MonkeyC 2.0 Do", MonkeyC2Do.class);
         //manager.register("MonkeyC 2.0 Write", MonkeyC2Write.class);
-        manager.register("Optical Distance Sensor Tester", DistanceSensorTester.class);
-        manager.register("LiftTest", LiftTest.class);
-        manager.register("LoggingSample", LoggingSample.class);
-        manager.register("OptionsSample", OptionsSample.class);
+        //manager.register("Optical Distance Sensor Tester", DistanceSensorTester.class);
+        //manager.register("LiftTest", LiftTest.class);
+        //manager.register("LoggingSample", LoggingSample.class);
+        //manager.register("OptionsSample", OptionsSample.class);
         manager.register("FTC9874 DriveTrain", DriveTrain9874.class);
         manager.register("Double Joystick 9874", DoubleJoystick9874.class);
         manager.register("Motor Calibration", MotorNameTest.class);
@@ -68,5 +68,6 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("Button Test Opmode 9874", ButtonTestOpmode.class);
         manager.register("TankDrive 9874", TankDrive9874.class);
         manager.register("Servo Test 9874", ServoTest.class);
+        manager.register("Controller test", ControllerTest.class);
     }
 }

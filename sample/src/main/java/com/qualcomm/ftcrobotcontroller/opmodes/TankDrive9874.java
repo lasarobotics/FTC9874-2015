@@ -35,9 +35,9 @@ public class TankDrive9874 extends OpMode {
         rightBack = hardwareMap.dcMotor.get("rightBack");
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightFront = hardwareMap.dcMotor.get("rightFront");
-        arm = hardwareMap.dcMotor.get("arm");
-        armEnd = hardwareMap.dcMotor.get("armEnd");
-        servo = hardwareMap.servo.get("servo");
+        //arm = hardwareMap.dcMotor.get("arm");
+        //armEnd = hardwareMap.dcMotor.get("armEnd");
+        //servo = hardwareMap.servo.get("servo");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class TankDrive9874 extends OpMode {
         //Read values from controller
         one.update(gamepad1);
 
-        //Servo
+        /*//Servo
         if(one.b == 3.0) {
             if((servoPower += 0.05) > 0.95) {
                 servoPower = 0.95;
@@ -74,7 +74,7 @@ public class TankDrive9874 extends OpMode {
             armEnd.setPower(-0.1);
         } else {
             armEnd.setPower(0);
-        }
+        }*/
 
         //Determine how to adjust speed of robot
         //If normal, robot speed adjusted by DAMPENING

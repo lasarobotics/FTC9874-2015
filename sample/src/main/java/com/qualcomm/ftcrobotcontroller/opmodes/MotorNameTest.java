@@ -39,7 +39,7 @@ public class MotorNameTest extends OpMode {
             rightBack.setPower(ON_POWER);
         else
             rightBack.setPower(0);
-        if(one.dpad_down == 3.0)
+        /*if(one.dpad_down == 3.0)
             arm.setPower(ON_POWER);
         else
             arm.setPower(0);
@@ -57,7 +57,7 @@ public class MotorNameTest extends OpMode {
                 servoAmount = 0;
             }
         }
-        servo.setPosition(servoAmount);
+        servo.setPosition(servoAmount);*/
     }
     @Override
     public void init() {
@@ -65,9 +65,9 @@ public class MotorNameTest extends OpMode {
         leftBack = hardwareMap.dcMotor.get("leftBack");
         rightFront = hardwareMap.dcMotor.get("rightFront");
         rightBack = hardwareMap.dcMotor.get("rightBack");
-        arm = hardwareMap.dcMotor.get("arm");
-        armEnd = hardwareMap.dcMotor.get("armEnd");
-        servo = hardwareMap.servo.get("servo");
+        //arm = hardwareMap.dcMotor.get("arm");
+        //armEnd = hardwareMap.dcMotor.get("armEnd");
+        //servo = hardwareMap.servo.get("servo");
         one = new Controller(gamepad1);
     }
 }

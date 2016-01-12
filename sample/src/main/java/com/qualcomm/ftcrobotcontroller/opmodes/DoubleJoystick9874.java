@@ -46,9 +46,9 @@ public class DoubleJoystick9874 extends OpMode {
         rightBack = hardwareMap.dcMotor.get("rightBack");
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightFront = hardwareMap.dcMotor.get("rightFront");
-        arm = hardwareMap.dcMotor.get("arm");
-        armEnd = hardwareMap.dcMotor.get("armEnd");
-        servo = hardwareMap.servo.get("servo");
+        //arm = hardwareMap.dcMotor.get("arm");
+        //armEnd = hardwareMap.dcMotor.get("armEnd");
+        //servo = hardwareMap.servo.get("servo");
     }
 
     @Override
@@ -61,7 +61,7 @@ public class DoubleJoystick9874 extends OpMode {
         //Read info from controller
         one.update(gamepad1);
 
-        //Servo
+        /*//Servo
         if(one.b == 3.0) {
             if((servoPower += 0.05) > 0.95) {
                 servoPower = 0.95;
@@ -72,7 +72,8 @@ public class DoubleJoystick9874 extends OpMode {
                 servoPower = -0.95;
             }
         }
-        servo.setPosition(servoPower);
+        servo.setPosition(servoPower); //FIXME also
+        */
 
         //FIXME uncomment
         /*//Arm
