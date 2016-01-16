@@ -30,7 +30,7 @@ public class EasyAutonomous9874 extends OpMode {
             leftFront.setPower(0.2);
             rightBack.setPower(-0.2);
             rightFront.setPower(-0.2);
-        } else if(speedy < NUM_TICKS/2) {
+        } else if(speedy < NUM_TICKS*2) {
             leftBack.setPower(-0.2);
             leftFront.setPower(-0.2);
             rightBack.setPower(0.2);
