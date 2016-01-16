@@ -69,5 +69,7 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("TankDrive 9874", TankDrive9874.class);
         manager.register("Servo Test 9874", ServoTest.class);
         manager.register("Controller test", ControllerTest.class);
+        manager.register("Counter test", CounterTest.class);
+        manager.register("Left front test", LeftFrontTest.class);
     }
 }
