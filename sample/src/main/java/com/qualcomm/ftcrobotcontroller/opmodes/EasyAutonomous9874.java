@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Created by Russell on 12/5/2015.
  */
 public class EasyAutonomous9874 extends OpMode {
+    public static final int NUM_TICKS = 200;
+
     Controller one = new Controller(gamepad1);
     DcMotor leftBack, rightBack, leftFront, rightFront;
 
@@ -23,9 +25,14 @@ public class EasyAutonomous9874 extends OpMode {
     @Override
     public void loop() {
         speedy++;
-        if(speedy < 1000) {
+        if(speedy < NUM_TICKS) {
             leftBack.setPower(0.2);
             leftFront.setPower(0.2);
+            rightBack.setPower(-0.2);
+            rightFront.setPower(-0.2);
+        } else if(speedy < NUM_TICKS/2) {
+            leftBack.setPower(-0.2);
+            leftFront.setPower(-0.2);
             rightBack.setPower(0.2);
             rightFront.setPower(0.2);
         } else {
