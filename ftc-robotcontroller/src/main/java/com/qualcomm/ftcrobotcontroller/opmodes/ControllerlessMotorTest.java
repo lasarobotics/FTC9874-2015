@@ -1,6 +1,5 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.lasarobotics.library.controller.Controller;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -11,7 +10,6 @@ public class ControllerlessMotorTest extends OpMode {
     public static final int NUM_TICKS = 200;
     public static final double POWER = 0.2;
 
-    Controller one = new Controller(gamepad1);
     DcMotor leftBack, rightBack, leftFront, rightFront;
 
     @Override
