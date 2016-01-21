@@ -55,12 +55,13 @@ public class FtcOpModeRegister implements OpModeRegister {
      * If two or more op modes are registered with the same name, the app will display an error.
      */
         manager.register("NullOp", NullOp.class);
-        manager.register("Basic Vision Sample", BasicVisionSample.class);
-        manager.register("Manual Vision Sample", ManualVisionSample.class);
-        manager.register("Move to Beacon Sample", MoveToBeaconVisionSample.class);
+        //manager.register("Basic Vision Sample", BasicVisionSample.class);
+        //manager.register("Manual Vision Sample", ManualVisionSample.class);
+        //manager.register("Move to Beacon Sample", MoveToBeaconVisionSample.class);
         manager.register("Dump test", DumperTest.class);
         manager.register("Controllerless motor test", ControllerlessMotorTest.class);
         manager.register("Controller test", ControllerTest.class);
         manager.register("Test vision opmode", TestVisionOpmode.class);
+        manager.register("Double Joystick", DoubleJoystick9874.class);
     }
 }

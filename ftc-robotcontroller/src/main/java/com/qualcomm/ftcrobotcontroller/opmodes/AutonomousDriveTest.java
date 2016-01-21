@@ -9,6 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class AutonomousDriveTest extends OpMode {
     public static final int NUM_TICKS = 200;
     public static final double POWER = 0.2;
+    //Wheel change constants
+    public static final int LEFT_MODIFIER = -1;
+    public static final int RIGHT_MODIFIER = 1;
 
     DcMotor leftBack, rightBack, leftFront, rightFront;
 
@@ -27,10 +30,10 @@ public class AutonomousDriveTest extends OpMode {
         if(++speedy > 200) {
             speedy = 0;
             movingForward = !movingForward;
-            rightBack.setPower(movingForward ? 0.2 : -0.2);
-            rightFront.setPower(movingForward ? 0.2 : -0.2);
-            leftBack.setPower(movingForward ? -0.2 : 0.2);
-            leftFront.setPower(movingForward ? -0.2 : 0.2);
+            rightBack.setPower((movingForward ? 0.2 : -0.2) * RIGHT_MODIFIER);
+            rightFront.setPower((movingForward ? 0.2 : -0.2) * RIGHT_MODIFIER);
+            leftBack.setPower((movingForward ? -0.2 : 0.2) * LEFT_MODIFIER);
+            leftFront.setPower((movingForward ? -0.2 : 0.2) * LEFT_MODIFIER);
         }
     }
 }
