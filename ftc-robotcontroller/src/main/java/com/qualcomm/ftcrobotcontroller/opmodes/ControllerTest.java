@@ -1,12 +1,13 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.lasarobotics.library.controller.Controller;
 
 /**
  * Created by S2061383 on 1/12/2016.
  */
-public class ControllerTest /*extends OpMode*/ {
-    /*Controller controller = new Controller(gamepad1);
+public class ControllerTest extends OpMode {
+    Controller controller = new Controller(gamepad1);
 
     @Override
     public void init() {
@@ -18,5 +19,5 @@ public class ControllerTest /*extends OpMode*/ {
         controller.update(gamepad1);
         telemetry.addData("Left stick x", controller.left_stick_x);
         telemetry.addData("A button", controller.a);
-    }*/
+    }
 }
