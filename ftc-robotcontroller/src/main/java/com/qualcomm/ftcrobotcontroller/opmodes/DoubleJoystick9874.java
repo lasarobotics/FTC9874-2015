@@ -1,5 +1,7 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import android.widget.Button;
+
 import com.lasarobotics.library.controller.ButtonState;
 import com.lasarobotics.library.controller.Controller;
 import com.lasarobotics.library.util.MathUtil;
@@ -28,6 +30,9 @@ public class DoubleJoystick9874 extends OpMode {
     public static final float MIN_TURN = 0.10f;
     //Smart stop constants
     public static final double SMARTSTOP_INCREMENT = 0.1;
+    //Drive direction
+    boolean forwardDrive = true;
+    boolean wasBPressed = false;
 
     //Smart stop variables
     private boolean smartStop = false;
@@ -58,6 +63,18 @@ public class DoubleJoystick9874 extends OpMode {
         if(one.y == ButtonState.PRESSED)
             smartStop = !smartStop;
 
+        //Drive direction swapper
+        if(wasBPressed) {
+            if(one.b != ButtonState.PRESSED) {
+                //When b is released
+                forwardDrive = !forwardDrive;
+                wasBPressed = false;
+            }
+        } else if(one.b == ButtonState.PRESSED) {
+            //When b is first pressed
+            wasBPressed = true;
+        }
+
         //Read right stick to determine where to turn, account for controller noise, and scale
         float xVal = (float) MathUtil.deadband(STICK_THRESHOLD, one.right_stick_x * (1 + TURN_INCREASE));
         //Make sure xVal is within acceptable parameters
@@ -78,23 +95,23 @@ public class DoubleJoystick9874 extends OpMode {
         //Move robot
         if(xVal > 0 && Math.abs(yVal) > 0) {
             //If moving forward or backward and right
-            leftBack.setPower(-yVal);
-            leftFront.setPower(-yVal);
+            leftBack.setPower(calculateAdjustedValue(-yVal));
+            leftFront.setPower(calculateAdjustedValue(-yVal));
             setRightMotors(xVal, yVal);
         } else if(xVal < 0 && Math.abs(yVal) > 0) {
             //If moving forward or backward and left
-            rightBack.setPower(yVal);
-            rightFront.setPower(yVal);
+            rightBack.setPower(calculateAdjustedValue(yVal));
+            rightFront.setPower(calculateAdjustedValue(yVal));
             setLeftMotors(xVal, yVal);
         } else if(xVal != 0 && yVal == 0) {
             //If turning stationary
             stationaryTurn(xVal);
         } else if(xVal == 0 && yVal != 0) {
             //If going straight
-            leftFront.setPower(-yVal);
-            leftBack.setPower(-yVal);
-            rightFront.setPower(yVal);
-            rightBack.setPower(yVal);
+            leftFront.setPower(calculateAdjustedValue(-yVal));
+            leftBack.setPower(calculateAdjustedValue(-yVal));
+            rightFront.setPower(calculateAdjustedValue(yVal));
+            rightBack.setPower(calculateAdjustedValue(yVal));
         } else {
             //Going nowhere
             leftFront.setPower(0);
@@ -113,8 +130,8 @@ public class DoubleJoystick9874 extends OpMode {
         if(yVal < 0) {
             leftPower = -leftPower;
         }
-        leftBack.setPower(-leftPower);
-        leftFront.setPower(-leftPower);
+        leftBack.setPower(calculateAdjustedValue(-leftPower));
+        leftFront.setPower(calculateAdjustedValue(-leftPower));
     }
     private void setRightMotors(float xVal, float yVal) {
         float rightPower = Math.abs(yVal) * (1 - xVal);
@@ -122,14 +139,18 @@ public class DoubleJoystick9874 extends OpMode {
         if(yVal < 0) {
             rightPower = -rightPower;
         }
-        rightBack.setPower(rightPower);
-        rightFront.setPower(rightPower);
+        rightBack.setPower(calculateAdjustedValue(rightPower));
+        rightFront.setPower(calculateAdjustedValue(rightPower));
     }
     private void stationaryTurn(float xVal) {
-        leftBack.setPower(xVal);
-        leftFront.setPower(xVal);
-        rightBack.setPower(xVal);
-        rightFront.setPower(xVal);
+        leftBack.setPower(calculateAdjustedValue(xVal));
+        leftFront.setPower(calculateAdjustedValue(xVal));
+        rightBack.setPower(calculateAdjustedValue(xVal));
+        rightFront.setPower(calculateAdjustedValue(xVal));
+    }
+
+    private double calculateAdjustedValue(double val) {
+        return (forwardDrive ? val : val * -1);
     }
 
     @Override
