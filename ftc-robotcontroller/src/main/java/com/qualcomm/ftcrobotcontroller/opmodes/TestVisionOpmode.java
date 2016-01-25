@@ -1,5 +1,8 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.lasarobotics.library.nav.EncodedMotor;
+import com.lasarobotics.library.nav.MotorInfo;
+import com.lasarobotics.library.util.Units;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.lasarobotics.vision.ftc.resq.Beacon;
@@ -20,6 +23,7 @@ public class TestVisionOpmode extends VisionOpMode {
     private static final double DRIVE_MOTOR_POWER = 0.2; //Motor power when driving
     private static final double UNCERTAIN_MOTOR_POWER = 0; //Motor power when unsure what to do
     DcMotor leftBack, rightBack, leftFront, rightFront; //Motors
+    EncodedMotor leftBackEncoded, rightBackEncoded, leftFrontEncoded, rightFrontEncoded; //Encoders
 
     @Override
     public void init() {
@@ -31,10 +35,52 @@ public class TestVisionOpmode extends VisionOpMode {
         rightFront = hardwareMap.dcMotor.get("rightFront");
     }
 
+    public void encoderInit() {
+        MotorInfo info = new MotorInfo(3, Units.Distance.INCHES);
+        leftBackEncoded = new EncodedMotor(leftBack, info);
+        rightBackEncoded = new EncodedMotor(rightBack, info);
+        leftFrontEncoded = new EncodedMotor(leftFront, info);
+        rightFrontEncoded = new EncodedMotor(rightFront, info);
+    }
+
+    private int initialEncoderReverse = 0;
+    public void encoderLoop() {
+        leftBackEncoded.update();
+        rightBackEncoded.update();
+        leftFrontEncoded.update();
+        rightFrontEncoded.update();
+        if(initialEncoderReverse == 0) {
+            leftBackEncoded.moveDistance(-1, Units.Distance.METERS);
+            leftFrontEncoded.moveDistance(-1, Units.Distance.METERS);
+            rightBackEncoded.moveDistance(1, Units.Distance.METERS);
+            rightFrontEncoded.moveDistance(1, Units.Distance.METERS);
+            initialEncoderReverse = 1;
+        } else if(initialEncoderReverse == 1) {
+            if (leftBackEncoded.getCurrentPosition(Units.Distance.METERS) >= 0.95) {
+                initialEncoderReverse = 2;
+            }
+        } else if(initialEncoderReverse == 2) {
+            rightBackEncoded.reset();
+            rightFrontEncoded.reset();
+            initialEncoderReverse = 3;
+        } else if(initialEncoderReverse == 3) {
+            if(rightFrontEncoded.hasEncoderReset()) {
+                rightBackEncoded.moveDistance(0.2, Units.Distance.METERS);
+                rightFrontEncoded.moveDistance(0.2, Units.Distance.METERS);
+                initialEncoderReverse = 4;
+            }
+        } else if(initialEncoderReverse == 4) {
+            if(rightBackEncoded.getCurrentPosition(Units.Distance.METERS) >= 0.15) {
+                stop();
+            }
+        }
+    }
+
     @Override
     public void loop() {
         super.loop();
         if(stop) {
+            encoderLoop();
             return;
         }
         if(moveForwardTimer > 0) {
@@ -48,14 +94,18 @@ public class TestVisionOpmode extends VisionOpMode {
             } catch(Exception e) {}
         }
         if(moveBackwardTimer > 0) {
-            moveBackwardTimer--;
+            encoderInit();
+            stop = true;
+            return;
+            /*moveBackwardTimer--;
             if(moveBackwardTimer == 0) {
+                encoderInit();
                 stop = true;
             }
             driveBackward();
             try {
                 Thread.sleep(1);
-            } catch(Exception e) {}
+            } catch(Exception e) {}*/
         }
         bce.loop(this);
         absoluteCenter = height/2;
