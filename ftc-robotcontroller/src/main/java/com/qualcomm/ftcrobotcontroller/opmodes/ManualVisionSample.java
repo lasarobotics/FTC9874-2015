@@ -57,7 +57,7 @@ public class ManualVisionSample extends ManualVisionOpMode {
     private static final ColorHSV upperBoundRed = new ColorHSV((int) ((360.0 + 5.0) / 360.0 * 255.0), 255, 255);
     private static final ColorHSV lowerBoundBlue = new ColorHSV((int) (170.0 / 360.0 * 255.0), (int) (0.200 * 255.0), (int) (0.750 * 255.0));
     private static final ColorHSV upperBoundBlue = new ColorHSV((int) (227.0 / 360.0 * 255.0), 255, 255);
-    private Beacon.BeaconAnalysis colorAnalysis = new Beacon.BeaconAnalysis(new Size());
+    private Beacon.BeaconAnalysis colorAnalysis = new Beacon.BeaconAnalysis();
     private ColorBlobDetector detectorRed;
     private ColorBlobDetector detectorBlue;
     private boolean noError = true;
@@ -70,7 +70,11 @@ public class ManualVisionSample extends ManualVisionOpMode {
         detectorRed = new ColorBlobDetector(lowerBoundRed, upperBoundRed);
         detectorBlue = new ColorBlobDetector(lowerBoundBlue, upperBoundBlue);
 
-        this.setCamera(Cameras.PRIMARY);
+        //Set the camera used for detection
+        this.setCamera(Cameras.SECONDARY);
+        //Set the frame size
+        //Larger = sometimes more accurate, but also much slower
+        //For Testable OpModes, this might make the image appear small - it might be best not to use this
         this.setFrameSize(new Size(900, 900));
     }
 
@@ -102,8 +106,8 @@ public class ManualVisionSample extends ManualVisionOpMode {
             List<Contour> contoursBlue = detectorBlue.getContours();
 
             //Get color analysis
-            Beacon beacon = new Beacon();
-            colorAnalysis = beacon.analyzeColor(contoursRed, contoursBlue, rgba, gray, colorAnalysis);
+            Beacon beacon = new Beacon(Beacon.AnalysisMethod.DEFAULT);
+            colorAnalysis = beacon.analyzeFrame(contoursRed, contoursBlue, rgba, gray);
 
             //Draw red and blue contours
             Drawing.drawContours(rgba, contoursRed, new ColorRGBA(255, 0, 0), 2);

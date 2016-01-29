@@ -7,3 +7,7 @@ include ':ftc-visionlib'
 //Demos and Tests
 include ':ftc-cameratest'
 include ':ftc-robotcontroller'
+
+project(':ftc-visionlib').projectDir = new File('FTCVision/ftc-visionlib')
+project(':ftc-cameratest').projectDir = new File('FTCVision/ftc-cameratest')
+project(':opencv-java').projectDir = new File('FTCVision/opencv-java')

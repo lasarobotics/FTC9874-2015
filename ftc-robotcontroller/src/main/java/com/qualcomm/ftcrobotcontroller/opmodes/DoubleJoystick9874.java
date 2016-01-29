@@ -1,5 +1,6 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import android.util.Log;
 import android.widget.Button;
 
 import com.lasarobotics.library.controller.ButtonState;
@@ -31,7 +32,7 @@ public class DoubleJoystick9874 extends OpMode {
     //Smart stop constants
     public static final double SMARTSTOP_INCREMENT = 0.1;
     //Drive direction
-    boolean forwardDrive = true;
+    boolean forwardDrive = false;
     boolean wasBPressed = false;
 
     //Smart stop variables
@@ -64,7 +65,7 @@ public class DoubleJoystick9874 extends OpMode {
             smartStop = !smartStop;
 
         //Drive direction swapper
-        if(wasBPressed) {
+        /*if(wasBPressed) {
             if(one.b != ButtonState.PRESSED) {
                 //When b is released
                 forwardDrive = !forwardDrive;
@@ -73,7 +74,7 @@ public class DoubleJoystick9874 extends OpMode {
         } else if(one.b == ButtonState.PRESSED) {
             //When b is first pressed
             wasBPressed = true;
-        }
+        }*/
 
         //Read right stick to determine where to turn, account for controller noise, and scale
         float xVal = (float) MathUtil.deadband(STICK_THRESHOLD, one.right_stick_x * (1 + TURN_INCREASE));

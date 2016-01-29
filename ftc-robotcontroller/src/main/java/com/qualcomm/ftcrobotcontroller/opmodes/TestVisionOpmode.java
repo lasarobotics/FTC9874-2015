@@ -19,8 +19,8 @@ public class TestVisionOpmode extends VisionOpMode {
     private int moveBackwardTimer = 0;
     private boolean stop = false;
     private static final int BEACON_WAIT_TIME = 5; //Time to wait before rotation if unable to find beacon
-    private static final double ROTATE_MOTOR_POWER = 0.1; //Motor power when rotating
-    private static final double DRIVE_MOTOR_POWER = 0.2; //Motor power when driving
+    private static final double ROTATE_MOTOR_POWER = 0.3; //Motor power when rotating
+    private static final double DRIVE_MOTOR_POWER = 0.4; //Motor power when driving
     private static final double UNCERTAIN_MOTOR_POWER = 0; //Motor power when unsure what to do
     DcMotor leftBack, rightBack, leftFront, rightFront; //Motors
     EncodedMotor leftBackEncoded, rightBackEncoded, leftFrontEncoded, rightFrontEncoded; //Encoders
@@ -28,7 +28,7 @@ public class TestVisionOpmode extends VisionOpMode {
     @Override
     public void init() {
         super.init();
-        bce.init(this);
+        enableExtension(Extensions.BEACON);
         leftBack = hardwareMap.dcMotor.get("leftBack");
         rightBack = hardwareMap.dcMotor.get("rightBack");
         leftFront = hardwareMap.dcMotor.get("leftFront");
@@ -145,32 +145,36 @@ public class TestVisionOpmode extends VisionOpMode {
     }
 
     public void rotateLeft() {
-        rightFront.setPower(ROTATE_MOTOR_POWER);
-        rightBack.setPower(ROTATE_MOTOR_POWER);
+        rightFront.setPower(-ROTATE_MOTOR_POWER);
+        rightBack.setPower(-ROTATE_MOTOR_POWER);
+        leftFront.setPower(-ROTATE_MOTOR_POWER);
+        leftBack.setPower(-ROTATE_MOTOR_POWER);
     }
 
     public void rotateRight() {
         leftFront.setPower(ROTATE_MOTOR_POWER);
         leftBack.setPower(ROTATE_MOTOR_POWER);
+        leftFront.setPower(ROTATE_MOTOR_POWER);
+        leftBack.setPower(ROTATE_MOTOR_POWER);
     }
 
     public void driveForward() {
-        rightFront.setPower(DRIVE_MOTOR_POWER);
-        rightBack.setPower(DRIVE_MOTOR_POWER);
+        rightFront.setPower(-DRIVE_MOTOR_POWER);
+        rightBack.setPower(-DRIVE_MOTOR_POWER);
         leftFront.setPower(DRIVE_MOTOR_POWER);
         leftBack.setPower(DRIVE_MOTOR_POWER);
     }
 
     public void driveBackward() {
-        rightFront.setPower(-DRIVE_MOTOR_POWER);
-        rightBack.setPower(-DRIVE_MOTOR_POWER);
+        rightFront.setPower(DRIVE_MOTOR_POWER);
+        rightBack.setPower(DRIVE_MOTOR_POWER);
         leftFront.setPower(-DRIVE_MOTOR_POWER);
         leftBack.setPower(-DRIVE_MOTOR_POWER);
     }
 
     public void unsureMotors() {
-        rightFront.setPower(UNCERTAIN_MOTOR_POWER);
-        rightBack.setPower(UNCERTAIN_MOTOR_POWER);
+        rightFront.setPower(-UNCERTAIN_MOTOR_POWER);
+        rightBack.setPower(-UNCERTAIN_MOTOR_POWER);
         leftFront.setPower(UNCERTAIN_MOTOR_POWER);
         leftBack.setPower(UNCERTAIN_MOTOR_POWER);
     }
