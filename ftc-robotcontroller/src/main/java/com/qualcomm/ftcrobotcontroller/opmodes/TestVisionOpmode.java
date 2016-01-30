@@ -27,7 +27,7 @@ public class TestVisionOpmode extends VisionOpMode {
     private boolean stop = false;
     private static final int BEACON_WAIT_TIME = 200; //Time to wait before rotation if unable to find beacon
     private static final double ROTATE_MOTOR_POWER = 0.3; //Motor power when rotating
-    private static final double DRIVE_MOTOR_POWER = 0.3; //Motor power when driving
+    private double DRIVE_MOTOR_POWER = 0.3; //Motor power when driving
     private static final double UNCERTAIN_MOTOR_POWER = 0; //Motor power when unsure what to do
     DcMotor leftBack, rightBack, leftFront, rightFront; //Motors
     EncodedMotor leftBackEncoded, rightBackEncoded, leftFrontEncoded, rightFrontEncoded; //Encoders
@@ -131,6 +131,7 @@ public class TestVisionOpmode extends VisionOpMode {
     int count2 = 0;
     int count3 = 0;
     int count4 = 0;
+    int count5 = 0;
     public void otherLoop() {
         leftBackEncoded.update();
         rightBackEncoded.update();
@@ -153,8 +154,10 @@ public class TestVisionOpmode extends VisionOpMode {
                 initialEncoderReverse = 3;
             }
         } else if(initialEncoderReverse == 3) {
-            rightBack.setPower(0.2);
-            rightFront.setPower(0.2);
+            rightBack.setPower(0.3);
+            rightFront.setPower(0.3);
+            leftBack.setPower(0.3);
+            rightBack.setPower(0.3);
             initialEncoderReverse = 4;
             //if(rightFrontEncoded.hasEncoderReset()) {
             //    rightBackEncoded.moveDistance(0.2, Units.Distance.METERS);
@@ -162,7 +165,16 @@ public class TestVisionOpmode extends VisionOpMode {
             //    initialEncoderReverse = 4;
             //}
         } else if(initialEncoderReverse == 4) {
-            if(++count4 > 500) {
+            if(++count4 > 200) {
+                initialEncoderReverse = 5;
+            }
+        } else if(initialEncoderReverse == 5) {
+            DRIVE_MOTOR_POWER = 0.8;
+            driveForward();
+            initialEncoderReverse = 6;
+        } else if(initialEncoderReverse == 6) {
+            if(++count5 < 600) {
+                unsureMotors();
                 stop();
             }
         }
