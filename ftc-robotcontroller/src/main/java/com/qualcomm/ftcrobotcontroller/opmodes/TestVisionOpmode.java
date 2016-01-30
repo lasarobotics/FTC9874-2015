@@ -1,13 +1,18 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import android.util.Log;
+
 import com.lasarobotics.library.nav.EncodedMotor;
 import com.lasarobotics.library.nav.MotorInfo;
 import com.lasarobotics.library.util.Units;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
+import org.lasarobotics.vision.android.Cameras;
 import org.lasarobotics.vision.ftc.resq.Beacon;
 import org.lasarobotics.vision.opmode.VisionOpMode;
 import org.lasarobotics.vision.opmode.extensions.BeaconExtension;
+import org.opencv.core.Size;
 
 public class TestVisionOpmode extends VisionOpMode {
     BeaconExtension bce = new BeaconExtension();
@@ -17,10 +22,12 @@ public class TestVisionOpmode extends VisionOpMode {
     private int moveThreshold; //Allowed deviation of beacon from image center
     private int moveForwardTimer = 0;
     private int moveBackwardTimer = 0;
+    private boolean initialMoveForward = true;
+    private boolean isInitialMoveForwardPartTwo = true;
     private boolean stop = false;
-    private static final int BEACON_WAIT_TIME = 5; //Time to wait before rotation if unable to find beacon
+    private static final int BEACON_WAIT_TIME = 200; //Time to wait before rotation if unable to find beacon
     private static final double ROTATE_MOTOR_POWER = 0.3; //Motor power when rotating
-    private static final double DRIVE_MOTOR_POWER = 0.4; //Motor power when driving
+    private static final double DRIVE_MOTOR_POWER = 0.3; //Motor power when driving
     private static final double UNCERTAIN_MOTOR_POWER = 0; //Motor power when unsure what to do
     DcMotor leftBack, rightBack, leftFront, rightFront; //Motors
     EncodedMotor leftBackEncoded, rightBackEncoded, leftFrontEncoded, rightFrontEncoded; //Encoders
@@ -28,11 +35,50 @@ public class TestVisionOpmode extends VisionOpMode {
     @Override
     public void init() {
         super.init();
-        enableExtension(Extensions.BEACON);
+
+        //START VISION JUNK
+        //Set the camera used for detection
+        this.setCamera(Cameras.PRIMARY);
+        //Set the frame size
+        //Larger = sometimes more accurate, but also much slower
+        //For Testable OpModes, this might make the image appear small - it might be best not to use this
+        this.setFrameSize(new Size(900, 900));
+
+        //Enable extensions. Use what you need.
+        enableExtension(Extensions.BEACON);     //Beacon detection
+        enableExtension(Extensions.ROTATION);   //Automatic screen rotation correction
+
+        //UNCOMMENT THIS IF you're using a SECONDARY (facing toward screen) camera
+        //or when you rotate the phone, sometimes the colors swap
+        //rotation.setRotationInversion(true);
+
+        //You can do this for certain phones which switch red and blue
+        //It will rotate the display and detection by 180 degrees, making it upright
+        //rotation.setUnbiasedOrientation(ScreenOrientation.LANDSCAPE_WEST);
+
+        //Set the beacon analysis method
+        //Try them all and see what works!
+        beacon.setAnalysisMethod(Beacon.AnalysisMethod.FAST);
+        //END VISION JUNK
+
         leftBack = hardwareMap.dcMotor.get("leftBack");
         rightBack = hardwareMap.dcMotor.get("rightBack");
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightFront = hardwareMap.dcMotor.get("rightFront");
+    }
+
+    public void encoderEnable() {
+        rightBackEncoded.enableEncoder();
+        rightFrontEncoded.enableEncoder();
+        leftBackEncoded.enableEncoder();
+        leftFrontEncoded.enableEncoder();
+    }
+
+    public void encoderDisable() {
+        rightBackEncoded.disableEncoder();
+        rightFrontEncoded.disableEncoder();
+        leftBackEncoded.disableEncoder();
+        leftFrontEncoded.disableEncoder();
     }
 
     public void encoderInit() {
@@ -41,6 +87,13 @@ public class TestVisionOpmode extends VisionOpMode {
         rightBackEncoded = new EncodedMotor(rightBack, info);
         leftFrontEncoded = new EncodedMotor(leftFront, info);
         rightFrontEncoded = new EncodedMotor(rightFront, info);
+    }
+
+    public void encoderReset() {
+        rightBackEncoded.reset();
+        rightFrontEncoded.reset();
+        leftBackEncoded.reset();
+        leftFrontEncoded.reset();
     }
 
     private int initialEncoderReverse = 0;
@@ -56,7 +109,7 @@ public class TestVisionOpmode extends VisionOpMode {
             rightFrontEncoded.moveDistance(1, Units.Distance.METERS);
             initialEncoderReverse = 1;
         } else if(initialEncoderReverse == 1) {
-            if (leftBackEncoded.getCurrentPosition(Units.Distance.METERS) >= 0.95) {
+            if (leftBackEncoded.getCurrentPosition(Units.Distance.METERS) <= -0.95) {
                 initialEncoderReverse = 2;
             }
         } else if(initialEncoderReverse == 2) {
@@ -75,12 +128,92 @@ public class TestVisionOpmode extends VisionOpMode {
             }
         }
     }
+    int count2 = 0;
+    int count3 = 0;
+    int count4 = 0;
+    public void otherLoop() {
+        leftBackEncoded.update();
+        rightBackEncoded.update();
+        leftFrontEncoded.update();
+        rightFrontEncoded.update();
+        if(initialEncoderReverse == 0) {
+            leftBack.setPower(-1);
+            leftFront.setPower(-1);
+            rightBack.setPower(1);
+            rightFront.setPower(1);
+            initialEncoderReverse = 1;
+        } else if(initialEncoderReverse == 1) {
+            if (++count2 > 300) {
+                initialEncoderReverse = 2;
+            }
+        } else if(initialEncoderReverse == 2) {
+            //rightBackEncoded.reset();
+            //rightFrontEncoded.reset();
+            if(++count3 > 100) {
+                initialEncoderReverse = 3;
+            }
+        } else if(initialEncoderReverse == 3) {
+            rightBack.setPower(0.2);
+            rightFront.setPower(0.2);
+            initialEncoderReverse = 4;
+            //if(rightFrontEncoded.hasEncoderReset()) {
+            //    rightBackEncoded.moveDistance(0.2, Units.Distance.METERS);
+            //    rightFrontEncoded.moveDistance(0.2, Units.Distance.METERS);
+            //    initialEncoderReverse = 4;
+            //}
+        } else if(initialEncoderReverse == 4) {
+            if(++count4 > 500) {
+                stop();
+            }
+        }
+    }
 
+    int count1 = 0;
+    boolean initServo = false;
     @Override
     public void loop() {
         super.loop();
+
+        if(!initServo) {
+            Servo arm = hardwareMap.servo.get("arm");
+            if(arm != null) {
+                arm.setPosition(0);
+            }
+        }
+
+        if(!isInitialMoveForwardPartTwo) {
+            telemetry.addData("Initial move forward2", "true");
+            telemetry.addData("Pos", String.valueOf(rightBackEncoded.getCurrentPosition()));
+            if(count1 > 300) {
+                isInitialMoveForwardPartTwo = true;
+                //encoderDisable();
+            }
+            return;
+        }
+        if(initialMoveForward) {
+            telemetry.addData("Initial move forward", "true");
+            //encoderInit();
+            //encoderEnable();
+            //encoderReset();
+            //leftBackEncoded.moveDistance(-1, Units.Distance.METERS);
+            //leftFrontEncoded.moveDistance(-1, Units.Distance.METERS);
+            //rightBackEncoded.moveDistance(1, Units.Distance.METERS);
+            //rightFrontEncoded.moveDistance(1, Units.Distance.METERS);
+            isInitialMoveForwardPartTwo = false;
+            initialMoveForward = false;
+            return;
+        }
+
+        //Vision telemetry
+        telemetry.addData("Beacon Color", beacon.getAnalysis().getColorString());
+        telemetry.addData("Beacon Location (Center)", beacon.getAnalysis().getLocationString());
+        telemetry.addData("Beacon Confidence", beacon.getAnalysis().getConfidenceString());
+        telemetry.addData("Rotation Compensation", rotation.getRotationCompensationAngle());
+        telemetry.addData("Frame Rate", fps.getFPSString() + " FPS");
+        telemetry.addData("Frame Size", "Width: " + width + " Height: " + height);
+
         if(stop) {
-            encoderLoop();
+            otherLoop();
             return;
         }
         if(moveForwardTimer > 0) {
@@ -94,7 +227,12 @@ public class TestVisionOpmode extends VisionOpMode {
             } catch(Exception e) {}
         }
         if(moveBackwardTimer > 0) {
-            encoderInit();
+            //encoderReset();
+            //encoderEnable();
+            Servo arm = hardwareMap.servo.get("arm");
+            if(arm != null) {
+                arm.setPosition(1);
+            }
             stop = true;
             return;
             /*moveBackwardTimer--;
@@ -112,8 +250,9 @@ public class TestVisionOpmode extends VisionOpMode {
         moveThreshold = height/19;
 
         Beacon.BeaconAnalysis analysis = bce.getAnalysis();
+        telemetry.addData("FOUND?", analysis.getStateRight());
         int beaconCenterX = (int)(analysis.getTopLeft().x + analysis.getBottomRight().x)/2;
-        if(analysis.isBeaconFound()) {
+        if(analysis.getStateRight() != Beacon.BeaconColor.UNKNOWN) {
             if(!withinThreshold(beaconCenterX, lastBeaconCenterX, moveThreshold)) {
                 //Last known location of beacon is drastically different from current location
                 if(beaconWaitCounter++ < BEACON_WAIT_TIME) {

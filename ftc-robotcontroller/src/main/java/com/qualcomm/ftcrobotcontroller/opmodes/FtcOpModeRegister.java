@@ -63,5 +63,6 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("Controller test", ControllerTest.class);
         manager.register("Test vision opmode", TestVisionOpmode.class);
         manager.register("Double Joystick", DoubleJoystick9874.class);
+        manager.register("Encoder Test", EncoderTest.class);
     }
 }
