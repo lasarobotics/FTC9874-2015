@@ -8,6 +8,7 @@ import com.lasarobotics.library.controller.Controller;
 import com.lasarobotics.library.util.MathUtil;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by Will and Russell on 11/7/2015.
@@ -34,12 +35,14 @@ public class DoubleJoystick9874 extends OpMode {
     //Drive direction
     boolean forwardDrive = false;
     boolean wasBPressed = false;
+    double servoPos = 0.0;
 
     //Smart stop variables
     private boolean smartStop = false;
     private float previousSpeed = 0;
 
     DcMotor leftBack, rightBack, leftFront, rightFront;
+    Servo arm;
 
     @Override
     public void init() {
@@ -48,11 +51,11 @@ public class DoubleJoystick9874 extends OpMode {
         rightBack = hardwareMap.dcMotor.get("rightBack");
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightFront = hardwareMap.dcMotor.get("rightFront");
-    }
 
-    @Override
-    public void start() {
-
+        arm = hardwareMap.servo.get("arm");
+        if(arm != null) {
+            arm.setPosition(0);
+        }
     }
 
     @Override
@@ -64,6 +67,21 @@ public class DoubleJoystick9874 extends OpMode {
         if(one.y == ButtonState.PRESSED)
             smartStop = !smartStop;
 
+        if(arm != null) {
+            if(one.left_bumper == ButtonState.PRESSED) {
+                servoPos -= 0.01;
+            }
+            if(one.right_bumper == ButtonState.PRESSED) {
+                servoPos += 0.01;
+            }
+            if(servoPos < 0) {
+                servoPos = 0;
+            }
+            if(servoPos > 1) {
+                servoPos = 1;
+            }
+            arm.setPosition(servoPos);
+        }
         //Drive direction swapper
         /*if(wasBPressed) {
             if(one.b != ButtonState.PRESSED) {
